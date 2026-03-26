@@ -14,11 +14,3 @@ http://127.0.0.1:8000/docs
 python3 -m http.server 5500
 открыть: 
 http://localhost:5500/front/auth.html
-
-## Настройка .env
-
-Создайте файл .env на основе .env.example
-
-в корне проекта 
-
-cp .env.example .env
