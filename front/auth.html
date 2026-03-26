@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App — Вход</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+    <header class="hero">
+        <div class="hero__content">
+            <h1>Todo App</h1>
+            <p>Вход и регистрация</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="auth-layout">
+            <article class="panel auth-panel">
+                <h2>Регистрация</h2>
+
+                <div class="field">
+                    <label for="reg_email">Email</label>
+                    <input id="reg_email" type="email" placeholder="Введите email">
+                </div>
+
+                <div class="field">
+                    <label for="reg_password">Пароль</label>
+                    <input id="reg_password" type="password" placeholder="Введите пароль">
+                </div>
+
+                <button class="btn btn-primary" onclick="register()">Зарегистрироваться</button>
+            </article>
+
+            <article class="panel auth-panel">
+                <h2>Вход</h2>
+
+                <div class="field">
+                    <label for="login_email">Email</label>
+                    <input id="login_email" type="email" placeholder="Введите email">
+                </div>
+
+                <div class="field">
+                    <label for="login_password">Пароль</label>
+                    <input id="login_password" type="password" placeholder="Введите пароль">
+                </div>
+
+                <button class="btn btn-dark" onclick="login()">Войти</button>
+            </article>
+        </section>
+
+        <section class="status-card auth-status">
+            <div class="status-card__title">Статус</div>
+            <div id="statusMessage" class="status-card__text">Готово к работе</div>
+        </section>
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

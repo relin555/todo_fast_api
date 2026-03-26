@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App — Задачи</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+    <header class="hero">
+        <div class="hero__content hero__row">
+            <div>
+                <h1>Мои задачи</h1>
+                <p>Управление задачами</p>
+            </div>
+            <button class="btn btn-danger btn-auto" onclick="logout()">Выйти</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="panel-grid">
+            <article class="panel panel--wide">
+                <h2>Создать задачу</h2>
+
+                <div class="field">
+                    <label for="title">Заголовок</label>
+                    <input id="title" type="text" placeholder="Сахават напиши сюда свою задачу">
+                </div>
+
+                <div class="field">
+                    <label for="description">Описание</label>
+                    <input id="description" type="text" placeholder="Не смотри а напиши что нибудь">
+                </div>
+
+                <div class="row">
+                    <div class="field">
+                        <label for="status">Статус</label>
+                        <select id="status">
+                            <option value="в ожидании">в ожидании</option>
+                            <option value="в работе">в работе</option>
+                            <option value="завершено">завершено</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="priority">Приоритет</label>
+                        <input id="priority" type="number" min="1" max="10" placeholder="1-10">
+                    </div>
+                </div>
+
+                <button class="btn btn-success" onclick="createTask()">Создать задачу</button>
+            </article>
+        </section>
+
+        <section class="tasks-section">
+            <div class="tasks-header">
+                <div>
+                    <h2>Список задач</h2>
+                    <p>Нажми кнопку, чтобы обновить список</p>
+                </div>
+                <div class="controls">
+                    <button class="btn btn-primary btn-auto" onclick="getTasks()">Загрузить задачи</button>
+                
+                    <select id="sortSelect" onchange="sortTasks()">
+                        <option value="">Без сортировки</option>
+                        <option value="priority_asc">Приоритетнее</option>
+                        <option value="priority_desc">Можно и потом</option>
+                        <option value="status">По статусу</option>
+                    </select>
+                </div>
+            </div>
+
+            <ul id="tasks" class="tasks-list"></ul>
+        </section>
+
+        <section class="status-card">
+            <div class="status-card__title">Статус</div>
+            <div id="statusMessage" class="status-card__text">Готово к работе</div>
+        </section>
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
