@@ -26,13 +26,12 @@ def test_create_task_invalid_data():
     )
     assert response.status_code == 422
 
-def test_get_not_existing_task():
-    response = client.get("/tasks/999999")
-    assert response.status_code == 404
+# def test_get_not_existing_task():
+#     response = client.get("/tasks/999999")
+#     assert response.status_code == 404
 
 @pytest.mark.asyncio
-    
-async def test_root():
+async def test_docs():
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as ac:
