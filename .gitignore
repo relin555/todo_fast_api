@@ -6,7 +6,13 @@ __pycache__/
 venv/
 .venv/
 
+.pytest_cache/
+
 .env
+
+.coverage
+
+htmlcov/
 
 .DS_Store
 
@@ -15,5 +21,7 @@ venv/
 .idea/
 
 *.log
+
+*.db
 
 *.sqlite3
