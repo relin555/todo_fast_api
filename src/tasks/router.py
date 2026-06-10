@@ -18,7 +18,7 @@ async def add_task(
     current_user: User = Depends(current_active_user),
 ):
     statement = insert(Task).values(
-        **new_task.dict(),
+        **new_task.model_dump(),
         owner_id=current_user.id
     )
     await session.execute(statement)
@@ -33,6 +33,39 @@ async def get_tasks(
 ):
     result = await session.execute(
         select(Task).where(Task.owner_id == current_user.id)
+    )
+    return result.scalars().all()
+
+
+@router.get("/search")
+async def search_tasks(
+    q: str,
+    session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(current_active_user),
+):
+    result = await session.execute(
+        select(Task).where(
+            Task.owner_id == current_user.id,
+            or_(
+                Task.title.ilike(f"%{q}%"),
+                Task.description.ilike(f"%{q}%")
+            )
+        )
+    )
+    return result.scalars().all()
+
+
+@router.get("/top")
+async def get_top_tasks(
+    limit: int = Query(3, ge=1, le=100),
+    session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(current_active_user),
+):
+    result = await session.execute(
+        select(Task)
+        .where(Task.owner_id == current_user.id)
+        .order_by(Task.priority.desc(), Task.created_at.asc())
+        .limit(limit)
     )
     return result.scalars().all()
 
@@ -124,34 +157,3 @@ async def delete_task(
     await session.commit()
 
     return {"status": "success"}
-
-@router.get("/search")
-async def search_tasks(
-    q: str,
-    session: AsyncSession = Depends(get_async_session),
-    current_user: User = Depends(current_active_user),
-):
-    result = await session.execute(
-        select(Task).where(
-            Task.owner_id == current_user.id,
-            or_(
-                Task.title.ilike(f"%{q}%"),
-                Task.description.ilike(f"%{q}%")
-            )
-        )
-    )
-    return result.scalars().all()
-
-@router.get("/top")
-async def get_top_tasks(
-    limit: int = Query(3, ge=1, le=100),
-    session: AsyncSession = Depends(get_async_session),
-    current_user: User = Depends(current_active_user),
-):
-    result = await session.execute(
-        select(Task)
-        .where(Task.owner_id == current_user.id)
-        .order_by(Task.priority.desc(), Task.created_at.asc())
-        .limit(limit)
-    )
-    return result.scalars().all()
