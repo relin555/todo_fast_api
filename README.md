@@ -84,25 +84,10 @@ locust
 
 ### Шаг 1 — Запустить проект
 
-```bash
 docker compose up --build
-```
 
 Подождать пока все 3 контейнера поднимутся (db, app, front).
 
-### Шаг 2 — Запустить запись терминала
-
-```bash
-asciinema rec demo.cast
-```
-
-Или записать экран через QuickTime Player: Файл → Новая запись экрана.
-
-### Шаг 3 — Выполнить запросы к API
-
-Открыть новую вкладку терминала:
-
-```bash
 # Регистрация
 curl -X POST http://localhost:8000/auth/register \
   -H "Content-Type: application/json" \
@@ -128,15 +113,6 @@ curl http://localhost:8000/tasks/ \
 
 # Проверить изменения в БД
 docker compose exec db psql -U sergejbrajcuk -d postgres -c "SELECT id, title, status, priority FROM tasks;"
-```
-
-### Шаг 4 — Остановить запись
-
-```bash
-exit
-```
-
-Файл `demo.cast` можно воспроизвести командой `asciinema play demo.cast`.
 
 ### Альтернатива — через браузер (Swagger UI)
 
@@ -146,36 +122,24 @@ exit
 
 Docker Swarm запускает контейнеры в кластере и автоматически перезапускает их при падении.
 
-### Шаг 1 — Инициализировать Swarm
+### Собрать образ приложения
 
-```bash
-docker swarm init
-```
-
-### Шаг 2 — Собрать образ приложения
-
-```bash
 docker build -t todo-fastapi:latest .
-```
 
-### Шаг 3 — Загрузить переменные окружения и запустить стек
+### Загрузить переменные окружения и запустить стек
 
-```bash
 export $(cat .env | xargs)
 docker stack deploy -c docker-stack.yml todo
-```
+
 
 ### Проверить статус сервисов
 
-```bash
 docker stack services todo
 docker service ps todo_app
 docker service ps todo_db
-```
 
 ### Проверить автоперезапуск
 
-```bash
 # Узнать ID контейнера приложения
 docker ps | grep todo_app
 
@@ -184,24 +148,19 @@ docker rm -f <container_id>
 
 # Swarm автоматически поднимет новый — проверить
 docker service ps todo_app
-```
 
 ### Проверить сохранение данных при пересоздании БД
 
-```bash
 # Остановить сервис БД
 docker service scale todo_db=0
 
-# Поднять обратно — данные сохранятся через volume
+# Поднять обратно данные сохранятся через volume
 docker service scale todo_db=1
-```
 
 ### Остановить стек
 
-```bash
 docker stack rm todo
 docker swarm leave --force
-```
 
 ## API
 
