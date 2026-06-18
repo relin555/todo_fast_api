@@ -55,10 +55,13 @@ uvicorn main:app --reload
 
 ## Запуск фронтенда
 
-python3 -m http.server 5500
-
+При запуске через Docker фронтенд уже доступен на порту 5500 (nginx).
 
 Открыть: http://localhost:5500/front/auth.html
+
+Для локального запуска без Docker (порт 5500 должен быть свободен):
+
+python3 -m http.server 5500
 
 ## что бы запустить тесты введите команды:
 
@@ -78,7 +81,11 @@ locust
 
 Открыть: http://127.0.0.1:8089
 
-Перед нагрузочным тестированием убедитесь, что сервер запущен и в БД есть пользователь "test@test.com" с паролем "12345678" в бд я его уже зарегестрировал.
+Перед нагрузочным тестированием убедитесь, что сервер запущен и в БД зарегистрирован пользователь "test@test.com" с паролем "12345678". Зарегистрировать можно командой:
+
+curl -X POST http://localhost:8000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@test.com", "password": "12345678"}'
 
 ## Демонстрация работы сервиса
 
@@ -95,8 +102,8 @@ curl -X POST http://localhost:8000/auth/register \
 
 # Логин — скопировать access_token из ответа
 curl -X POST http://localhost:8000/auth/jwt/login \
-  -F "username=demo@test.com" \
-  -F "password=12345678"
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=demo@test.com&password=12345678"
 
 # Вставить токен
 TOKEN="вставить_токен_сюда"
@@ -112,7 +119,7 @@ curl http://localhost:8000/tasks/ \
   -H "Authorization: Bearer $TOKEN"
 
 # Проверить изменения в БД
-docker compose exec db psql -U sergejbrajcuk -d postgres -c "SELECT id, title, status, priority FROM tasks;"
+docker compose exec db psql -U ${DB_USER} -d ${DB_NAME} -c "SELECT id, title, status, priority FROM tasks;"
 
 ### Альтернатива — через браузер (Swagger UI)
 
@@ -167,7 +174,7 @@ docker swarm leave --force
 
 POST "/auth/register" для регистрация
 POST "/auth/jwt/login для вход, получение токена
-GET "/tasks/" для создания списка задач
+GET "/tasks/" для получения списка задач
 POST "/tasks/" создать одну задачу
 GET "/tasks/search?q=текст" Поиск по заголовку и описанию
 GET "/tasks/top?limit=3" Топ задач по приоритету
