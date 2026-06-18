@@ -16,7 +16,7 @@ class Task(Base):
     description: Mapped[str] = mapped_column(String)
     status: Mapped[str] = mapped_column(String)
     priority: Mapped[int] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     owner_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
